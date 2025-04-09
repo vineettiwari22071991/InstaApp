@@ -1,8 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { Link } from 'expo-router'
+import { useAuth } from '@clerk/clerk-expo'
 
 export default function Index() {
+  const {signOut} = useAuth()
   return (
     <View
       style={{
@@ -11,13 +12,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx</Text>
-      <Link href="/profile">
-        <Text style={{ color: "blue" }}>Go to Profile</Text>
-      </Link>
-      <Link href="/notification">
-        <Text style={{ color: "blue" }}>Go to Notification</Text>
-      </Link>
+      <TouchableOpacity onPress={() => signOut()}>
+        <Text>Signout</Text>
+      </TouchableOpacity>
     </View>
   )
 }
