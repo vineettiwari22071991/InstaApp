@@ -3,14 +3,13 @@ import React from 'react'
 import { useAuth } from '@clerk/clerk-expo'
 import { styles } from '@/styles/feed.styles'
 import { Ionicons } from '@expo/vector-icons'
-import Story from '@/components/Story'
 import { STORIES } from '@/constants/mock-data'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { COLORS } from '@/constants/theme'
 import Loader from '@/components/Loader'
 import Post from '@/components/Post'
+import { StoryList } from '@/components/StoryList'
 
 export default function Index() {
   const { signOut } = useAuth()
@@ -31,7 +30,7 @@ export default function Index() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>spotlight</Text>
+        <Text style={styles.headerText}>InstaApp</Text>
         <TouchableOpacity onPress={() => signOut()}>
           <Ionicons name="log-out-outline" size={24} color="white" />
         </TouchableOpacity>
@@ -52,16 +51,7 @@ export default function Index() {
           style={{
             marginTop: 10,
           }}
-          ListHeaderComponent={()=>(
-            <FlatList 
-            data={STORIES}
-             keyExtractor={(item) => item.id}
-             horizontal
-             showsHorizontalScrollIndicator={false}
-             renderItem={({ item }) => <Story story={item} />}
-           />
-          )}   
-          
+          ListHeaderComponent={<StoryList stories={STORIES} />}    
         />
 
 

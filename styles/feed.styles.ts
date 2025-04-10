@@ -1,5 +1,5 @@
 import { COLORS } from '@/constants/theme'
-import { Dimensions, StyleSheet } from 'react-native'
+import { Dimensions, Platform, StyleSheet } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
 
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
         borderBottomColor: COLORS.surface,
     },
     headerText: {
-        fontSize: 24,
+        fontSize: 22,
         fontFamily: "JetBrainsMono-Medium",
         color: COLORS.primary,
     },
@@ -140,6 +140,90 @@ export const styles = StyleSheet.create({
         fontSize: 12,
         color: COLORS.grey,
         marginBottom: 8,
+      },
+      modalContainer:{
+        flex: 1,
+        backgroundColor: COLORS.background,
+        marginBottom: Platform.OS === "ios" ? 44 : 0,
+        marginTop: Platform.OS === "ios" ? 44 : 0,
+      },
+      modalHeader:{
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.grey,
+      },
+      modelHeadeText:{
+        fontSize: 18,
+        fontWeight: "600",
+        color: COLORS.white,
+      },
+      commentsList: {
+        flex: 1,
+      },
+      commentContainer: {
+        flexDirection: "row",
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderBottomWidth: 0.5,
+        borderBottomColor: COLORS.surface,
+      },
+      commentAvatar: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        marginRight: 12,
+      },
+      commentContent: {
+        flex: 1,
+      },
+      commentUsername: {
+        color: COLORS.white,
+        fontWeight: "500",
+        marginBottom: 4,
+      },
+      commentText: {
+        color: COLORS.white,
+        fontSize: 14,
+        lineHeight: 20,
+      },
+      commentTime: {
+        color: COLORS.grey,
+        fontSize: 12,
+        marginTop: 4,
+      },
+      commentInput: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderTopWidth: 0.5,
+        borderTopColor: COLORS.surface,
+        backgroundColor: COLORS.background,
+      },
+      input: {
+        flex: 1,
+        color: COLORS.white,
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        marginRight: 12,
+        backgroundColor: COLORS.surface,
+        borderRadius: 20,
+        fontSize: 14,
+      },
+      postButton: {
+        color: COLORS.primary,
+        fontWeight: "600",
+        fontSize: 14,
+      },
+      postButtonDisabled: {
+        opacity: 0.5,
+      },
+      centered: {
+        justifyContent: "center",
+        alignItems: "center",
       },
 
 
