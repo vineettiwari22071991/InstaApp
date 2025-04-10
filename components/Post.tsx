@@ -3,7 +3,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { styles } from "@/styles/feed.styles";
 import { Ionicons } from "@expo/vector-icons";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { memo, useState } from "react";
@@ -11,6 +11,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import isEqual from "fast-deep-equal/react";
 import CommentsModal from "./CommentsModal";
 import { formatDistanceToNow } from "date-fns";
+import { useUser } from "@clerk/clerk-expo";
 
 type PostProps = {
     post: {
@@ -35,11 +36,16 @@ function Post({ post }: PostProps) {
     const [likesCount, setLikesCount] = useState(post.likes)
     const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked)
 
+    const { user } = useUser()
+
+    const currentUser = useQuery(api.users.getUserByClerkId, user ? { clerkId: user.id } : "skip")
+
     const [commentsCount, setCommentsCount] = useState(post.comments)
     const [showComments, setShowComments] = useState(false)
 
     const toggleLike = useMutation(api.posts.toggleLike)
     const toggleBookmark = useMutation(api.bookmarks.toggleBookmark)
+    const deletePost = useMutation(api.posts.deletePost)
 
     const handleLike = async () => {
         try {
@@ -52,8 +58,16 @@ function Post({ post }: PostProps) {
     }
 
     const handleBookmark = async () => {
-     const newIsBookmarked =  await toggleBookmark({ postId: post._id })
-     setIsBookmarked(newIsBookmarked)
+        const newIsBookmarked = await toggleBookmark({ postId: post._id })
+        setIsBookmarked(newIsBookmarked)
+    }
+
+    const handleDeletePost = async () => {
+        try {
+            await deletePost({ postId: post._id })
+        } catch (error) {
+            console.log("Error deleting post: ", error)
+        }
     }
     return (
         <View style={styles.post}>
@@ -76,9 +90,20 @@ function Post({ post }: PostProps) {
 
                 </Link>
 
-                <TouchableOpacity>
-                    <Ionicons name="ellipsis-horizontal" size={20} color={COLORS.white} />
-                </TouchableOpacity>
+                {
+                    post?.author?._id !== currentUser?._id ? (
+                        <TouchableOpacity>
+                            <Ionicons name="ellipsis-horizontal" size={20} color={COLORS.white} />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity onPress={handleDeletePost}>
+                            <Ionicons name="trash-outline" size={20} color={COLORS.white} />
+                        </TouchableOpacity>
+
+                    )
+
+                }
+
             </View>
 
             {/* Post Image */}
@@ -104,8 +129,8 @@ function Post({ post }: PostProps) {
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity onPress={handleBookmark}>
-                    <Ionicons name={isBookmarked ? "bookmark" : "bookmark-outline"} size={22} 
-                    color={isBookmarked ? COLORS.primary : COLORS.white} />
+                    <Ionicons name={isBookmarked ? "bookmark" : "bookmark-outline"} size={22}
+                        color={isBookmarked ? COLORS.primary : COLORS.white} />
                 </TouchableOpacity>
             </View>
 

@@ -54,14 +54,14 @@ export default function CreateScreen() {
         storageId,
         caption
       })
+      setSelectedImage(null)
+      setCaption("")
       router.push("/(tabs)")
     } catch (error){
       console.error("Error uploading image:", error)
     }
     finally{
       setIsSharing(false)
-      setSelectedImage(null)
-      setCaption("")
     }
   }
 
